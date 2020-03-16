@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="games">
+	
+	<!-- insert games -->
+	<insert id="insertGame" parameterType="Game">
+		<selectKey resultType="int" order="BEFORE" keyProperty="no">
+			SELECT GAMES_SEQ.nextval 
+			FROM dual 
+		</selectKey>
+		INSERT INTO GAMES
+		VALUES (#{no}, systimestamp)
+	</insert>
+	
+	<select id="selectList" resultType="QuizItem">
+	SELECT  ct.no, ct.name, qe.content
+	FROM quiz_exps qe, quiz_infos qi, categories ct
+	WHERE qe.type = 'Q' AND qe.qi_no = qi.q_no AND ct.no = qi.category
+	order by DBMS_RANDOM.RANDOM 
+	</select>
+	
+</mapper>

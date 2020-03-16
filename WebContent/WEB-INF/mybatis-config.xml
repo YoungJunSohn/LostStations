@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC 
+"-//mybatis.org//DTD Config 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+
+	<!-- 컬럼에 NULL 추가 -->
+	<settings>
+		<setting name="jdbcTypeForNull" value="NULL" />
+	</settings>
+
+	<typeAliases>
+		<typeAlias alias="User" type="com.spoon.loststations.vo.User"/>
+		<typeAlias alias="Category" type="com.spoon.loststations.vo.Category"/>
+		<typeAlias alias="Cert" type="com.spoon.loststations.vo.Cert"/>
+		<typeAlias alias="Choice" type="com.spoon.loststations.vo.Choice"/>
+		<typeAlias alias="Comment" type="com.spoon.loststations.vo.Comment"/>
+		<typeAlias alias="Correct" type="com.spoon.loststations.vo.Correct"/>
+		<typeAlias alias="EM" type="com.spoon.loststations.vo.EM"/>
+		<typeAlias alias="EMCont" type="com.spoon.loststations.vo.EMCont"/>
+		<typeAlias alias="Game" type="com.spoon.loststations.vo.Game"/>
+		<typeAlias alias="GameUser" type="com.spoon.loststations.vo.GameUser"/>
+		<typeAlias alias="Like" type="com.spoon.loststations.vo.Like"/>
+		<typeAlias alias="PlayLog" type="com.spoon.loststations.vo.PlayLog"/>
+		<typeAlias alias="QuizExp" type="com.spoon.loststations.vo.QuizExp"/>
+		<typeAlias alias="QuizInfo" type="com.spoon.loststations.vo.QuizInfo"/>
+		<typeAlias alias="Report" type="com.spoon.loststations.vo.Report"/>
+		<typeAlias alias="PageVO" type="com.spoon.loststations.vo.PageVO"/>
+		<typeAlias alias="PlayData" type="com.spoon.loststations.vo.PlayData"/>
+		<typeAlias alias="QuizData" type="com.spoon.loststations.vo.QuizData"/>
+		<typeAlias alias="CommentData" type="com.spoon.loststations.vo.CommentData"/>
+		<typeAlias alias="GameResult" type="com.spoon.loststations.vo.GameResult"/>
+		<typeAlias alias="QuizItem" type="com.spoon.loststations.vo.QuizItem"/>
+		<typeAlias alias="Inquiry" type="com.spoon.loststations.vo.Inquiry"/>
+		<typeAlias alias="Answer" type="com.spoon.loststations.vo.Answer"/>
+	</typeAliases>  
+
+
+	<!-- mapper파일의 경로 -->
+	<mappers>
+		<mapper resource="com/spoon/loststations/mapper/categories.xml"/>
+		<mapper resource="com/spoon/loststations/mapper/certs.xml"/>
+		<mapper resource="com/spoon/loststations/mapper/choices.xml"/>
+		<mapper resource="com/spoon/loststations/mapper/comments.xml"/>
+		<mapper resource="com/spoon/loststations/mapper/corrects.xml"/>
+		<mapper resource="com/spoon/loststations/mapper/em-conts.xml"/>
+		<mapper resource="com/spoon/loststations/mapper/ems.xml"/>
+		<mapper resource="com/spoon/loststations/mapper/game-users.xml"/>
+		<mapper resource="com/spoon/loststations/mapper/games.xml"/>
+		<mapper resource="com/spoon/loststations/mapper/likes.xml"/>
+		<mapper resource="com/spoon/loststations/mapper/play-logs.xml"/>
+		<mapper resource="com/spoon/loststations/mapper/quiz-exps.xml"/>
+		<mapper resource="com/spoon/loststations/mapper/quiz-infos.xml"/>
+		<mapper resource="com/spoon/loststations/mapper/reports.xml"/>
+		<mapper resource="com/spoon/loststations/mapper/users.xml"/>
+		<mapper resource="com/spoon/loststations/mapper/inquiries.xml"/>
+		<mapper resource="com/spoon/loststations/mapper/answers.xml"/>
+	</mappers>
+
+</configuration>
+
+
+
+
+

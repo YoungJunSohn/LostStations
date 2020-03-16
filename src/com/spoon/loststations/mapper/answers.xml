@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="answers">
+	<!-- 재현 -->
+	<delete id="answersDelete" parameterType="int">
+		DELETE
+		FROM answers
+		WHERE i_no = #{iNo}
+	</delete>
+	
+	<select id="answerSelectOne" parameterType="int" resultType="Answer">
+		SELECT a.no, a.i_no iNo, a.content, a.user_no userNo, a.regdate, u.nickname, u.profile_image profileImage
+		FROM answers a, users u
+		WHERE a.user_no = u.no
+		AND a.i_no = #{no}
+	</select>
+	
+	<insert id="answerInsert" parameterType="Answer">
+		INSERT INTO answers(no, i_no, content, user_no, regdate)
+		VALUES (answers_seq.nextval, #{iNo}, #{content}, 9999, systimestamp)
+	</insert>
+	
+	<!-- 재현 -->
+</mapper>

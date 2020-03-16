@@ -1,0 +1,221 @@
+charset "UTF-8";
+
+body {
+	font-family: 'Noto Sans KR', sans-serif;
+}
+/*팝업시 반투명한 검은 창으로 로고 가려지게*/
+#bgPopup {
+	width: 100%;
+	height: 100%;
+	/*반투명한 검은창으로 랩*/
+	position: fixed;
+	background-color: rgba(0, 0, 0, 0.7);
+	z-index: 1;
+}
+/*로그인폼 안의 로그인 글자*/
+#loginForm .title {
+	display: block;
+	margin: 0 0 60px 0;
+	text-align: center;
+	font-size: 40px;
+	color: #37474f;
+}
+
+#loginForm a {
+	display: block;
+	height: 30px;
+	line-height: 30px;
+	margin-top: 20px;
+	text-align: center;
+	font-size: 12px;
+	text-decoration: none;
+	color: #37474f;
+}
+
+#loginForm a:hover {
+	text-decoration: underline;
+}
+
+#logo {
+	width: 800px;
+	height: 266px;
+	/*background-color:lemonchiffon;*/
+	background-image: url("/img/logo_bluegray.jpg");
+	background-repeat: no-repeat;
+	background-size: cover;
+	position: absolute;
+	left: 50%;
+	top: 0;
+	margin-left: -400px;
+}
+
+#content {
+	width: 1100px;
+	/*border: 1px solid #9e9e9e;*/
+	padding: 30px;
+	/*background-color:pink;*/
+	overflow: hidden;
+	position: absolute;
+	top: 300px;
+	left: 50%;
+	margin-left: -550px;
+}
+
+#videoBox {
+	width: 600px;
+	height: 330px;
+	border: 1px solid #9e9e9e;
+	/*background-color:lemonchiffon;*/
+	margin-right: 50px;
+	float: left;
+	text-align: center;
+	line-height: 330px;
+}
+/*로그인폼*/
+#loginForm {
+	width: 446px;
+	height: 330px;
+	/*border:1px solid #9e9e9e;*/
+	/*background-color:aquamarine;*/
+	float: left;
+}
+/*로그인 폼 인풋요소*/
+#loginForm input {
+	display: block;
+	width: 250px;
+	height: 25px;
+	margin: 20px auto 20px auto;
+	text-indent: 20px;
+	font-family: 'Nanum Gothic', sans-serif;
+	font-size: 15px;
+}
+/*유효성 검사 글자*/
+.msg {
+	text-align: center;
+	color: red;
+	margin-bottom: 20px;
+	display: none;
+}
+
+#loginBtn {
+	display: block;
+	margin: 40px auto 0 auto;
+	width: 150px;
+	height: 40px;
+	font-size: 15px;
+}
+
+#findPasswordLink {
+	float: left;
+	width: 150px;
+	/*background-color:aliceblue;*/
+}
+
+#signUpLink {
+	float: right;
+	width: 60px;
+	/*background-color:chartreuse;*/
+	margin-right: 30px;
+}
+/*********************************************  팝업 css  *****************************************************/
+/*  비밀번호변경완료 팝업  */
+body #passwordConfirmPopup {
+	/*팝업박스모델 및 배경색*/
+	width: 600px;
+	min-height: 300px;
+	padding: 30px;
+	background-color: #fff;
+	border: 1px solid #9e9e9e;
+	/*수평수직 가운데 정렬*/
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	margin: -176px 0 0 -331px;
+}
+
+#passwordChangePopup {
+	font-size: 20px;
+	text-align: center;
+	padding: 30px;
+	line-height: 120px;
+	/*background-color:yellowgreen;*/
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	margin: -90px 0 0 -297px;
+}
+/*인증메일 팝업*/
+body #confirmPopup {
+	width: 600px;
+	min-height: 300px;
+	padding: 30px;
+	background-color: #fff;
+	border: 1px solid #9e9e9e;
+	/*수평수직 가운데 정렬*/
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	margin: -176px 0 0 -331px;
+	opacity: 1;
+	/*display: none;*/
+}
+/*창닫기 버튼*/
+.close_popup {
+	width: 50px;
+	height: 50px;
+	color: #37474f;
+	font-size: 35px;
+	position: absolute;
+	top: 10px;
+	right: 10px;
+	background-color: transparent;
+	/*버튼 꾸미기 제거*/
+	user-select: none;
+	outline: none;
+	border: none;
+	/*버튼효과*/
+	cursor: pointer;
+	z-index: 2;
+}
+
+.close_popup:hover {
+	text-shadow: 2px 2px 2px #424242;
+	color: #f68500;
+}
+/*확인창 내용(p요소)*/
+#mailConfirm {
+	font-size: 20px;
+	text-align: center;
+	padding: 60px 30px 30px 10px;
+	line-height: 50px;
+}
+/*이메일 인증확인링크 버튼*/
+#mailLinkBtn {
+	display: block;
+	width: 300px;
+	height: 40px;
+	background-color: #37474f;
+	border-radius: 5px;
+	position: absolute;
+	bottom: 30px;
+	left: 50%;
+	margin-left: -150px;
+}
+
+#mailLinkBtn:hover {
+	background-color: #f68500;
+	box-shadow: 0 8px 17px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0
+		rgba(0, 0, 0, 0.19);
+}
+
+#mailLinkBtn a {
+	display: block;
+	width: 300px;
+	height: 40px;
+	line-height: 36px;
+	text-align: center;
+	font-size: 15px;
+	text-decoration: none;
+	color: #fff;
+	margin: auto;
+}

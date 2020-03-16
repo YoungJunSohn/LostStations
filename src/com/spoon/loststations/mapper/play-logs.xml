@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="play-logs">
+
+	<update id="update" parameterType="PlayLog">
+		UPDATE play_logs
+		SET ac_check = #{acCheck}
+		WHERE no = #{no}
+	</update>
+
+	<insert id="insertTrash" parameterType="PlayLog">
+		INSERT INTO play_logs(no, game_no, qi_no, send_user_no, receive_user_no, ac_check, regdate)
+		VALUES(PLAY_LOGS_SEQ.nextval, #{gameNo}, #{qiNo}, ${sendUserNo}, null, null, systimestamp)
+	</insert>
+	
+	<insert id="insertAttack" parameterType="PlayLog">
+		<selectKey order="BEFORE" resultType="int" keyProperty="no">
+			SELECT PLAY_LOGS_SEQ.nextval
+			FROM dual
+		</selectKey>
+		INSERT INTO play_logs(no, game_no, qi_no, send_user_no, receive_user_no, ac_check, regdate)
+		VALUES(#{no}, #{gameNo}, #{qiNo}, ${sendUserNo}, #{receiveUserNo}, null, systimestamp)
+	</insert>
+	
+<!-- 승률 -->
+	<select id="selectWinRate" parameterType="int" resultType="double">
+		select round(NVL((select count(game_no)
+		from game_users
+		where user_no=#{no}
+		and rank=1)/decode((select count(game_no)
+					from game_users
+					where user_no=#{no}),0,null,(select count(game_no)
+					from game_users
+					where user_no=#{no})), 0)*100 , 2) winRate
+		from dual
+	</select>
+	
+	<!-- 평균등수 -->
+	<select id="selectAvgRank" parameterType="int" resultType="double">
+		select NVL(round(((select sum(rank)
+		from game_users
+		where user_no = #{no})/(select count(rank)
+							from game_users
+							where user_no = #{no})), 2),0) winRate
+		from dual
+	</select>
+	
+	<!-- 정답률 -->
+	<select id="selectCorrectRate" parameterType="int" resultType="double">
+		select round(NVL((select count(ac_check)
+				from play_logs
+				where receive_user_no=#{receiveUserNo}
+				and ac_check='T')/ decode((select count(ac_check)
+									from play_logs
+									where receive_user_no=#{receiveUserNo}),0, null,(select count(ac_check)
+									from play_logs
+									where receive_user_no=#{receiveUserNo})),0)*100,2) correctRate
+		from dual
+
+	</select>
+	
+	<select id="selectUserList" resultType="User" parameterType="PageVO">
+		select no, rank , nickname, profileImage, playScore, registrationScore, verificationScore, regdate
+		from (select no,rownum rank , nickname, profileImage, playScore, registrationScore, verificationScore, regdate
+		from(select no, nickname, profile_image profileImage, play_score playScore, registration_score registrationScore, verification_score verificationScore, regdate
+	 		from users
+			order by 4 desc))
+		where rank between #{start} and #{end}
+	</select>
+	
+	
+	<select id="selectUserListTotal" resultType="int">
+			select count(no)
+	 		from users
+	</select>
+<!-- *************************************************** -->
+	
+	<select id="selectUserCategoriesTotal" resultType="PlayData" parameterType="int">
+		SELECT qi.category, count(*) total
+		FROM quiz_infos qi, play_logs p, categories ca
+		WHERE qi.no = p.qi_no
+		AND ca.no = qi.category
+		AND p.receive_user_no = #{userNo}
+		GROUP BY qi.category
+	</select>
+	
+		<select id="selectUserCategoriesCorrect" resultType="PlayData" parameterType="int">
+		SELECT ca.no category, count(*) correctNum
+		FROM quiz_infos qi, play_logs p, categories ca
+		WHERE qi.no = p.qi_no
+		AND ca.no = qi.category
+		AND p.ac_check = 'T'
+		AND p.receive_user_no = #{userNo}
+		GROUP BY qi.category
+	</select>
+	
+	<!-- insert playlogs(selectkey 이용하여, 이전의 시퀀스값 사용) -->
+	<insert id="insertGameResult" parameterType="GameResult">
+		<selectKey resultType="int" order="BEFORE" keyProperty="no">
+			PLAY_LOGS_SEQ.nextval 
+			FROM dual 
+		</selectKey>
+		INSERT INTO PLAY_LOGS
+		VALUES (#{no}, #{gameNo}, #{qiNo}, null, null, null, systimestamp)
+	</insert>
+	
+	<select id="selectUserAdoptInfo" resultType="QuizData" parameterType="int">
+		SELECT u.no userNo, NVL(crCheckTotal,0) crCheckTotal, NVL(correctNum,0) correctNum, NVL(dropNum,0) dropNum, NVL(total,0) total
+			FROM users u, (SELECT count(*) crCheckTotal
+						  FROM users u, play_logs p, quiz_infos q
+						  WHERE u.no = q.user_no
+						  AND q.no = p.qi_no
+						  AND p.ac_check IS NOT NULL
+						  AND q.user_no = #{userNo}) t, (SELECT count(*) correctNum
+						  						  FROM users u, play_logs p, quiz_infos q
+						  						  WHERE u.no = q.user_no
+						  						  AND q.no = p.qi_no
+						  						  AND p.ac_check = 'T'
+						  						  AND q.user_no = #{userNo}) c, (SELECT count(*) dropNum
+						  						  						  FROM users u, play_logs p, quiz_infos q
+						  						  						  WHERE u.no = q.user_no
+						  						  						  AND q.no = p.qi_no
+						  						  						  AND p.receive_user_no IS NULL
+						  						  						  AND q.user_no = #{userNo}) d, (SELECT count(*) total
+						  						  						  						  FROM users u, play_logs p, quiz_infos q
+						  						  						  						  WHERE u.no = q.user_no
+						  						  						  						  AND q.no = p.qi_no
+						  						  						  						  AND q.user_no = #{userNo}) tt
+			WHERE u.no = #{userNo}
+	</select>
+	
+	<select id="selectUserNo" parameterType="int" resultType="PlayData">
+		SELECT u.no userNo, totalQuiz, correctNum
+		FROM users u, (SELECT receive_user_no, count(*) correctNum
+					  FROM play_logs
+					  WHERE ac_check = 'T'
+					  GROUP BY receive_user_no) c, (SELECT receive_user_no, count(*) totalQuiz
+													FROM play_logs
+													GROUP BY receive_user_no) t
+		WHERE u.no = c.receive_user_no(+)
+		AND u.no = t.receive_user_no(+)
+		AND u.no = #{userNo}
+	</select>
+	
+</mapper>

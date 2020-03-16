@@ -1,0 +1,166 @@
+body {
+	background-color: #fafafa;
+}
+
+#content {
+	padding-top: 115px;
+}
+
+#resultWrap {
+	width: 1100px;
+	margin: auto;
+	background-color: #fff;
+	/*background-color: yellow;*/
+}
+/*승패결과 시작*/
+#result {
+	width: 900px;
+	height: 100px;
+	margin: auto;
+	text-align: center;
+	line-height: 100px;
+	font-size: 30px;
+	background-color: #fff;
+	/*background-color: #9c9c9c;*/
+}
+
+#grade {
+	font-size: 80px;
+	font-weight: bold;
+	color: #f68500;
+}
+/*승패결과 끝*/
+
+/*플레이 결과 시작*/
+#playResult {
+	width: 900px;
+	margin: 30px auto;
+	/*background-color: red;*/
+	background-color: #fff;
+}
+
+#mainBtn {
+	width: 150px;
+	height: 40px;
+	position: relative;
+	left: 750px;
+	border: none;
+	border-radius: 10px;
+	background-color: #37474f;
+}
+
+#mainBtn a {
+	width: 150px;
+	height: 40px;
+	position: absolute;
+	text-decoration: none;
+	line-height: 70px;
+	color: #fff;
+	font-size: 20px;
+	font-weight: bold;
+	right: 0;
+	bottom: 15px;
+	display: block;
+	/*background-color: red;*/
+}
+
+#mainBtn:hover {
+	background-color: #f68500;
+}
+
+#mainBtn a:hover {
+	/*text-shadow: 0 0 5px #ffffff;*/
+	font-size: 22px;
+	transition: .2s ease;
+	display: block;
+}
+
+#playResultList {
+	width: 900px;
+	position: relative;
+	/*background-color: red;*/
+}
+
+#playResultList li {
+	border-top: 1px solid #424242;
+	/*background-color: #fff;*/
+}
+
+.result_title {
+	width: 140px;
+	height: 60px;
+	position: absolute;
+	margin-left: 70px;
+	text-align: center;
+	line-height: 60px;
+	color: #424242;
+	/*background-color: #9933ff;*/
+}
+
+.result_value {
+	width: 130px;
+	height: 60px;
+	position: relative;
+	margin-left: 700px;
+	font-size: 22px;
+	font-weight: bold;
+	text-align: center;
+	line-height: 60px;
+	color: #37474f;
+	/*background-color: #9FA8DA;*/
+}
+
+#chart {
+	border-bottom: 2px solid #424242;
+}
+/*플레이 결과 끝*/
+
+/*틀린문제 해설 시작*/
+#explanation {
+	width: 900px;
+	/*margin: 338px auto 0 auto;*/
+	margin: auto;
+	background-color: #fff;
+	/*background-color: #9FA8DA;*/
+}
+
+#explanationTitle {
+	width: 180px;
+	height: 50px;
+	text-align: center;
+	line-height: 50px;
+	font-size: 20px;
+	margin-left: 20px;
+	/*background-color: red;*/
+}
+
+.explanation_paragraph {
+	margin: auto;
+	width: 788px;
+	font-size: 22px;
+	font-weight: bold;
+	padding-top: 10px;
+	/*background-color: green;*/
+}
+
+.explanation_paragraph p {
+	font-size: 16px;
+	font-weight: lighter;
+	color: #424242;
+	margin-top: 5px;
+	margin-bottom: 5px;
+	line-height: 25px;
+	/*background-color: red;*/
+}
+
+.explain {
+	/*background-color: yellow;*/
+	margin-bottom: 30px;
+}
+
+.list_box {
+	background-color: #fafafa;
+	box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0
+		rgba(0, 0, 0, 0.12);
+}
+/*틀린문제 해설 끝*/

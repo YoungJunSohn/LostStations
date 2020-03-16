@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="corrects">
+	
+	<insert id="insert" parameterType="Correct">
+		<selectKey order="BEFORE" keyProperty="no" resultType="int">
+			SELECT corrects_seq.nextval
+			FROM dual
+		</selectKey>
+		INSERT INTO corrects(no, qi_no, ch_no, user_no, regdate)
+		VALUES (#{no}, #{qiNo}, NULL, #{userNo}, systimestamp)
+	</insert>
+	
+	
+	<update id="updateAnswer" parameterType="Correct">
+		UPDATE corrects
+		SET ch_No = #{chNo}
+		WHERE no = #{no}
+	</update>
+	
+	<update id="update" parameterType="Correct">
+		UPDATE CORRECTS
+		SET CH_NO = #{chNo}
+		WHERE NO = #{no}
+	</update>
+	
+	<insert id="insertOX" parameterType="Correct">
+		<selectKey resultType="int" keyProperty="no" order="BEFORE">
+			SELECT CORRECTS_SEQ.nextval
+			FROM dual
+		</selectKey>
+		INSERT INTO CORRECTS
+		VALUES (#{no}, #{qiNo}, #{chNo}, #{userNo}, systimestamp)
+	</insert>
+	
+	<select id="selectOne" resultType="Correct" parameterType="int">
+		SELECT no, qi_no qiNo, ch_no chNo, user_no userNo, regdate
+		FROM corrects
+		WHERE no = #{no}
+	</select>
+	
+</mapper>

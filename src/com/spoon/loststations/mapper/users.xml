@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="users">
+
+	<!-- 재현0709 -->
+	<select id="selectVerifyQuizCount" parameterType="int" resultType="int">
+		SELECT(SELECT count(*)
+		   FROM likes 
+		   WHERE user_no = #{userNo}
+		   AND content_type='Q')+
+		  (SELECT count(DISTINCT qi_no)
+		   FROM ems
+		   WHERE user_no = #{userNo})-
+		   (SELECT count(*)
+			FROM(SELECT content_no no
+		 		 FROM likes 
+		 		 WHERE user_no = #{userNo}
+		 		 AND content_type='Q')b,
+				(SELECT DISTINCT qi_no no
+		 		 FROM ems
+		 		 WHERE user_no = #{userNo} ) a
+		    WHERE a.no = b.no)
+		FROM dual
+	</select>
+	
+	<select id="selectVerifyQuizAdoptCount" parameterType="int" resultType="int">
+		SELECT(SELECT COUNT (DISTINCT qi_no)
+			  FROM ems
+			  WHERE user_no = #{userNo}
+			  AND likes >= dislikes + 15)+
+			  (SELECT COUNT(l.content_no)
+			   FROM likes l, quiz_infos q
+			   WHERE l.user_no = #{userNo}
+			   AND l.content_type='Q'
+			   AND l.content_no = q.no
+			   AND q.likes >= q.dislikes + 15)-
+		
+			(SELECT count(*)
+			 FROM(SELECT DISTINCT qi_no no
+				  FROM ems
+				  WHERE user_no = #{userNo}
+				  AND likes >= dislikes + 15) a,
+		
+				(SELECT l.content_no no
+				 FROM likes l, quiz_infos q
+				 WHERE l.user_no = #{userNo}
+				 AND l.content_type='Q'
+				 AND l.content_no = q.no
+				 AND q.likes >= q.dislikes + 15) b
+			WHERE a.no = b.no)
+		FROM dual
+	</select>
+	<!-- 재현 -->
+	
+	<select id="selectPlayTop" resultType="User">
+		SELECT no, id, password, name, nickname, profile_image profileImage,
+ 				PLAY_SCORE playScore, REGISTRATION_SCORE registrationScore, VERIFICATION_SCORE verificationScore, REGDATE
+ 		FROM users
+ 		WHERE rownum = 1
+ 		ORDER BY PLAY_SCORE
+	</select>
+	<select id="selectRegisterTop" resultType="User">
+		SELECT no, id, password, name, nickname, profile_image profileImage,
+ 				PLAY_SCORE playScore, REGISTRATION_SCORE registrationScore, VERIFICATION_SCORE verificationScore, REGDATE
+ 		FROM users
+ 		WHERE rownum = 1
+ 		ORDER BY REGISTRATION_SCORE
+	</select>
+	<select id="selectVerifiTop" resultType="User">
+		SELECT no, id, password, name, nickname, profile_image profileImage,
+ 				PLAY_SCORE playScore, REGISTRATION_SCORE registrationScore, VERIFICATION_SCORE verificationScore, REGDATE
+ 		FROM users
+ 		WHERE rownum = 1
+ 		ORDER BY VERIFICATION_SCORE
+	</select>
+
+
+	<select id="selectOtherUserCorrectRate" resultType="double" parameterType="int">
+	select round((nvl(((select count(no) from ems where user_no=#{userNo} AND adopt_check = 'T')/
+		decode((select count(no) from ems where user_no=#{userNo}),0,null,(select count(no) from ems where user_no=#{userNo}))),0)),2)*100  
+	from dual
+
+	</select>
+  
+	<!-- 0621 채택률(분모 0으로 나누기 처리, 퀴즈 등록값이 없을때 null을 0으로 처리), 퍼센트 표기 처리 -->
+	<select id="selectPercentageOfVerification" resultType="double" parameterType="int">
+	select	
+		round(nvl((decode  ((SELECT count(no)
+					FROM quiz_infos
+					WHERE USER_NO=#{userNo}
+					and likes > dislikes +15),0,null,(SELECT count(no)
+													FROM quiz_infos
+													WHERE USER_NO=#{userNo}
+													and likes > dislikes +15)))
+				/(decode((select count(no)
+				from quiz_infos
+				where user_no=#{userNo}),0,null,(select count(no)
+				from quiz_infos
+				where user_no=#{userNo}))),0),2)*100 verifyRate
+		
+	from dual
+	</select>
+
+	<!-- 0621 유저당 총 채택 문제 수 -->
+	
+	<select id="selectCountVerifiedQuiz" resultType="int" parameterType="int">
+		select count(no) quizzes
+		from(select no, type, category, q_no qNo, e_no eNo, cr_no crNo, user_no userNo, likes, dislikes, views, regdate
+		    from quiz_infos
+		    where likes>dislikes+15)
+		where userNo= #{userNo}
+	</select>
+
+
+	<!-- 0620 랭킹페이지의 총 페이지 수 -->
+	<select id="selectUserListTotal" resultType="int">
+			select count(no)
+	 		from users
+	</select>
+
+	<!-- 0620 출제 랭킹 리스트 -->
+	<select id="selectRegisterRankingList" resultType="User" parameterType="PageVO">
+		select no, rank , nickname, profileImage, playScore, registrationScore, verificationScore, regdate
+		from (select no,rownum rank , nickname, profileImage, playScore, registrationScore, verificationScore, regdate
+		from(select no, nickname, profile_image profileImage, play_score playScore, registration_score registrationScore, verification_score verificationScore, regdate
+	 		from users
+			order by 5 desc))
+		where rank between #{start} and #{end}
+	</select>
+
+	<update id="updateProfileImage" parameterType="User">
+		UPDATE users
+		SET profile_image = #{profileImage}
+		WHERE no = #{no}
+	</update>
+
+	<select id="selectUserPlayRank" resultType="User" parameterType="int">
+		SELECT rank, no, playScore
+		FROM(SELECT no, playScore, rownum rank
+		FROM(SELECT no, play_score playScore
+		FROM users
+		ORDER BY play_score))
+		WHERE no = #{no}
+	</select>
+	
+	<select id="selectUserRegistrationRank" resultType="User" parameterType="int">
+		SELECT rank, no, registrationScore
+		FROM(SELECT no, registrationScore, rownum rank
+		FROM(SELECT no, registration_score registrationScore
+		FROM users
+		ORDER BY registration_score))
+		WHERE no = #{no}
+	</select>
+	
+	<select id="selectUserverificationRank" resultType="User" parameterType="int">
+		SELECT rank, no, verificationScore
+		FROM(SELECT no, verificationScore, rownum rank
+		FROM(SELECT no, verification_score verificationScore
+		FROM users
+		ORDER BY verification_score))
+		WHERE no = #{no}
+	</select>
+
+	<insert id="insert" parameterType="User">
+		<selectKey order="BEFORE" keyProperty="no" resultType="int">
+			SELECT users_seq.nextval
+			FROM dual
+		</selectKey>
+		INSERT INTO users(no,id,password,name,nickname,profile_image,play_score,registration_score,verification_score,regdate)
+		VALUES(#{no},#{id},#{password},#{name},#{nickname},'default.jpg','1000','1000','1000',systimestamp)
+	</insert>
+	
+	<select id="selectOne" parameterType="int" resultType="User">
+		SELECT no, nickname, profile_image profileImage
+		FROM users
+		WHERE no = #{no}
+	</select>
+	
+	<select id="selectCheckId" resultType="int" parameterType="string">
+		SELECT count(*)
+		FROM users
+		WHERE id = #{id}
+	</select>
+	
+	<select id="selectCheckNickname" resultType="int" parameterType="string">
+		SELECT count(*)
+		FROM users
+		WHERE nickname = #{nickname}
+	</select>
+	
+	<select id="selectByNo" resultType="User" parameterType="int">
+		SELECT no,id,password,name,nickname,profile_image profileImage,
+		play_score playScore,registration_score registrationScore,verification_score verificationScore,regdate
+		FROM users
+		WHERE no = #{no}
+	</select>
+
+	<select id="selectLogin" parameterType="User" resultType="User">
+		SELECT u.no, u.nickname,profile_image profileImage, c.code
+		FROM users u, certs c
+		WHERE u.no = c.user_no(+)
+		AND u.id = #{id}
+		AND u.password = #{password}
+		AND c.code IS NULL		
+	</select>
+	
+	<select id="selectCheckNameId" resultType="int" parameterType="User">
+		SELECT count(*)
+		FROM users
+		WHERE id = #{id} AND name = #{name}
+	</select>
+	
+	<select id="selectUserInfo" resultType="User" parameterType="User">
+		SELECT no, id, password, name, nickname, profile_image profileImage,
+ 				PLAY_SCORE playScore, REGISTRATION_SCORE registrationScore, VERIFICATION_SCORE verificationScore, REGDATE	
+		FROM users
+		WHERE id = #{id} AND name = #{name}
+	</select>
+
+	<update id="updatePassword" parameterType="User">
+		UPDATE users
+		SET password = #{password}
+		WHERE no = #{no}
+	</update>
+
+
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="reports">
+	<select id="selectOne" parameterType="Report" resultType="int">
+		SELECT COUNT(no)	
+		FROM reports
+		WHERE user_no = #{userNo}
+		AND content_type = #{contentType}
+		AND content_no = #{contentNo}
+	</select>
+	
+	<insert id="insert" parameterType="Report">
+		INSERT INTO reports(no, user_no, content_type, content_no, reason_type, regdate)
+		VALUES(reports_seq.nextval, #{userNo}, #{contentType}, #{contentNo}, #{reasonType}, systimestamp)
+	</insert>
+	<!-- 재현 -->
+</mapper>

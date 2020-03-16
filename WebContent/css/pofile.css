@@ -1,0 +1,629 @@
+body {
+            background-color: #fafafa;
+        }
+        main {
+            padding-top: 100px;
+        }
+        #content {
+            margin: auto;
+            width: 1100px;
+            height: 1000px;
+            padding-top: 115px;
+            position: relative;
+            box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+        }
+        .profile_wrap {
+            width: 100%;
+            display: inline-block;
+        }
+        .user_info {
+            margin: 30px 0 0 40px;
+            position: absolute;
+            display: inline-block;
+            float: left;
+        }
+        #userProfileImage {
+            float: left;
+            width: 100px;
+            height: 100px;
+            margin-left: 30px;
+            border-radius: 100px;
+            /*background-color: green;*/
+        }
+        #userNickname {
+            line-height: 5.5;
+            float: left;
+            width: 160px;
+            height: 100px;
+            /*background-color: yellow;*/
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        #profileImageSettingBtn {
+            position: absolute;
+            left: 100px;
+            top: 70px;
+            width: 30px;
+            height: 30px;
+            font-size: 25px;
+            color: #424242;
+            background-color: #DEDEDE;
+            border-radius: 500px;
+            text-align: center;
+            line-height: 31px;
+            cursor: pointer;
+            z-index: 1;
+        }
+        #imageChoiceBox {
+            width: 170px;
+            height: 100px;
+            position: absolute;
+            left: 130px;
+            top: 0px;
+            background-color: #fff;
+        }
+        #imageChoiceBox {
+            display: none;
+        }
+        #imageChoice {
+            width: 120px;
+            height: 40px;
+            position: relative;
+            margin-top: 5px;
+            margin-bottom: 5px;
+            left: 25px;
+            color: #fff;
+            background-color: #37474f;
+            text-align: center;
+            line-height: 40px;
+            cursor: pointer;
+        }
+        #imageChoice>label {
+        	display:block;
+        	position:relative;
+        	width: 120px;
+        	height: 40px;
+        	line-height: 40px;
+        	text-align: center;
+        	cursor: pointer;
+        }
+        #imageChoiceFile {
+            display: none;
+        }
+        #imageDelete {
+            width: 120px;
+            height: 40px;
+            position: relative;
+            margin-top: 5px;
+            margin-bottom: 5px;
+            top: 5px;
+            left: 25px;
+            color: #fff;
+            background-color: #37474f;
+            text-align: center;
+            line-height: 40px;
+            cursor: pointer;
+            /*display: none;*/
+        }
+        #imageChoice:hover {
+            background-color: #f68500;
+            font-size: 20px;
+        }
+        #imageDelete:hover {
+            background-color: #f68500;
+            font-size: 20px;
+        }
+        #UserRankingWrap {
+            float: right;
+            width: 450px;
+            height: 150px;
+            /*background-color: lightpink;*/
+            font-size: 24px;
+            font-weight: bold;
+            position: relative;
+            margin-right: 35px;
+            margin-top: 30px;
+        }
+        #UserRankingWrap .show {
+            float: left;
+            width: 130px;
+            height: 120px;
+            background-color: #fff;
+            color: #37474f;
+            position: relative;
+            font-size: 18px;
+            text-align: center;
+            margin: 10px;
+            line-height: 35px;
+            border-radius: 70px;
+        }
+        .show_tier {
+            width: 40px;
+            height: 30px;
+            margin-top: 10px;
+
+            background-size: 40px;
+            background-repeat: no-repeat;
+            /*background-color: red;*/
+            position: relative;
+            left: 44px;
+        }
+        #playTier {
+            background-image: url("/img/TierBronze.png");
+        }
+        #writeTier {
+            background-image: url("/img/TierBronze.png");
+        }
+        #verificationTier {
+            background-image: url("/img/TierGold.png");
+        }
+        .box {
+            width: 80px;
+            height: 30px;
+            font-size: 18px;
+            font-weight: bold;
+            margin: 10px auto 0 auto;
+            background-color: #fff;
+        }
+        .profile_tab {
+            position: absolute;
+            overflow: hidden;
+            top: 288px;
+            /*background-color: aquamarine;*/
+        }
+        .profile_tab li {
+            position: relative;
+            font-size: 28px;
+            font-weight: bold;
+            background-color: #fff;
+            border: 1px solid #a5a5a5;
+            padding: 8px;
+            cursor: pointer;
+            border-radius: 15px 15px 0 0;
+            float: left;
+            margin: 0 5px 0 5px;
+        }
+        .profile_tab li a {
+            padding: 4px;
+            color: #37474f;
+            text-decoration: none;
+            text-indent: -9999px;
+            font-size: 22px;
+        }
+        .profile_tab li:hover {
+            transition: .2s ease;
+            color: #fff;
+            background-color: #63767f;
+        }
+        .profile_tab li.on {
+            opacity: 1;
+            background-color: #37474f;
+        }
+        .profile_tab li.on a {
+            color: #fff;
+        }
+        .tab {
+            margin-top: 35px;
+            position: absolute;
+            display: none;
+            width: 1098px;
+            height: 800px;
+            color: white;
+            text-align: center;
+            padding-top: 20px;
+            font-size: 30px;
+        }
+        .tab.on {
+            display: block;
+        }
+        /*전적*/
+        #recordTab {
+            height: 760px;
+            background-color: #fff;
+            box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+         }
+        .record_info {
+            position: relative;
+            left: 80px;
+            width: 170px;
+            height: 100px;
+            float: left;
+            background-color: #ffefd8;
+            margin-left: 15px;
+            font-size: 18px;
+            color: #424242;
+            padding-top: 20px;
+            border-radius: 15px;
+        }
+        .record_info div {
+            padding-top: 25px;
+            font-size: 25px;
+            font-weight: bold;
+            color: #37474f;
+        }
+        #categoryChart {
+            width: 900px;
+            height: 300px;
+            margin-top: 160px;
+            margin-left: 99px;
+            box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+        }
+        #adoptInfoBox {
+            font-size: 18px;
+            margin-top: 40px;
+            margin-left: 100px;
+            width: 400px;
+            height: 200px;
+        }
+        .adopt_info {
+            box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+            width: 198px;
+            height: 98px;
+            font-size: 20px;
+            float: left;
+            color: #424242;
+            line-height: 40px;
+            /*background-color: #008a00;*/
+        }
+        .adopt_detail {
+            font-size: 25px;
+            font-weight: bold;
+            color: #37474f;
+        }
+        #verificationInfoBox {
+            position: absolute;
+            right: 0;
+            top: 500px;
+            margin-right: 100px;
+            margin-top: 20px;
+            box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+            width: 448px;
+            height: 200px;
+            /*background-color: yellow;*/
+        }
+        #verificationInfoBox ul {
+            width: 420px;
+            height: 200px;
+            margin: auto;
+            color: #000;
+        }
+        .verification_info {
+            padding-top: 25px;
+            margin: 10px 10px;
+            width: 120px;
+            height: 160px;
+            /*background-color: #F44336;*/
+            font-size: 20px;
+            line-height: 30px;
+            float: left;
+            color: #424242;
+        }
+        .verification_info_detail {
+            font-size: 25px;
+            color: #37474f;
+            font-weight: bold;
+            position: absolute;
+            bottom: 30px;
+            text-align: center;
+            margin-left: 30px;
+        }
+        .verificationInfo div {
+            font-size: 45px;
+            padding-top: 90px;
+        }
+        /*전적 끝*/
+
+        /*검증중인 문제 시작*/
+        #verifyingQuiz {
+            background-color: #fff;
+            height: 760px;
+        }
+        #sortFilterWrap {
+            width: 300px;
+            height: 30px;
+            position: relative;
+            left: 90px;
+            margin-top: 5px;
+            font-size: 16px;
+            box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+        }
+        .sort_btn {
+            width: 98px;
+            height: 28px;
+            position: absolute;
+            text-align: center;
+            line-height: 28px;
+            /*border: 1px solid #424242;*/
+            box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+            cursor: pointer;
+            font-weight: bold;
+            color: #37474f;
+        }
+        .sort_btn:nth-of-type(1) {
+            left: 0px;
+        }
+        .sort_btn:nth-of-type(2) {
+            left: 100px;
+        }
+        .sort_btn:nth-of-type(3) {
+            left: 200px;
+        }
+
+        .sort_btn:nth-of-type(1):hover {background-color: #ffb960; box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);}
+        .sort_btn:nth-of-type(2):hover {background-color: #ffb960; box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);}
+        .sort_btn:nth-of-type(3):hover {background-color: #ffb960; box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);}
+
+        #sortFilterWrap .radio:checked+.lbl {
+            background-color: #f68500;
+            color: #fff;
+        }
+        .radio {
+            display: none;
+        }
+        #quizListWrap {
+            position: relative;
+            width: 960px;
+            min-height: 300px;
+            background-color: #fff;
+            margin: auto;
+            padding-top: 10px;
+        }
+        #quizList {
+            width: 900px;
+            height: 620px;
+            margin: auto;
+            left: 30px;
+            /*background-color: #f68500;*/
+        }
+        #quizList>li {
+            width: 900px;
+            height: 124px;
+            /*background-color: #80CBC4;*/
+            border-bottom: 1px solid #9e9e9e;
+            background-color: #fff;
+            position: relative;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.1), 0 2px 10px 0 rgba(0, 0, 0, 0.08);
+            font-size: 20px;
+        }
+        .quiz_wrap {
+            display: block;
+            width: 900px;
+            height: 124px;
+            cursor: pointer;
+            text-decoration: none;
+            color: #777;
+        }
+        .category {
+            position: absolute;
+            top: 10px;
+            left: 20px;
+            font-size: 15px;
+        }
+        .quiz {
+            width: 700px;
+            height: 60px;
+            position: absolute;
+            left: 100px;
+            top: 40px;
+            color: #37474f;
+            font-size: 18px;
+            font-weight: bold;
+            /*background-color: #FF1744;*/
+            text-align: center;
+            line-height: 20px;
+        }
+        #quizList .reg_date {
+            position: absolute;
+            bottom: 15px;
+            left: 20px;
+            font-size: 15px;
+        }
+        .views{
+            position: absolute;
+            bottom: 15px;
+            left: 105px;
+            font-size: 15px;
+        }
+        .quizType{
+            position: absolute;
+            right: 20px;
+            top: 10px;
+        }
+        .like {
+            position: absolute;
+            right: 140px;
+            bottom: 15px;
+            font-size: 15px;
+        }
+        .dislike {
+            position: absolute;
+            right: 80px;
+            bottom: 15px;
+            font-size: 15px;
+        }
+        .comment{
+            position: absolute;
+            right: 20px;
+            bottom: 15px;
+            font-size: 15px;
+        }
+        /*검증중인 문제 끝*/
+
+        /*채택된 문제 시작*/
+        #adoptQuiz {
+            background-color: #fff;
+            height: 761px;
+            color: #777;
+            box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.1), 0 2px 10px 0 rgba(0, 0, 0, 0.08);
+        }
+        #adoptQuizList {
+            width: 900px;
+            height: 640px;
+            /*background-color: #CE93D8;*/
+            margin: 20px auto 0 auto;
+            left: 30px;
+            font-size: 18px;
+        }
+        #adoptQuizList>li {
+            width: 900px;
+            height: 120px;
+            /*background-color: #80CBC4;*/
+            /*border-bottom: 1px solid #424242;*/
+            margin-bottom: 20px;
+            position: relative;
+            cursor: pointer;
+            font-size: 18px;
+            font-weight: bold;
+            box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.1), 0 2px 10px 0 rgba(0, 0, 0, 0.08);
+        }
+        .category {
+            position: absolute;
+            top: 8px;
+            left: 20px;
+            text-align: center;
+            font-size: 15px;
+        }
+        .adopt_quiz {
+            position: relative;
+            top: 60px;
+            text-align: center;
+            color: #37474f;
+        }
+        .quiz_type {
+            position: absolute;
+            top: 10px;
+            left: 840px;
+            font-size: 19px;
+        }
+        #adoptQuizList .reg_date {
+            position: absolute;
+            bottom: 5px;
+            left: 770px;
+            font-size: 15px;
+        }
+        #adoptQuizDetailView {
+            width: 598px;
+            height: 400px;
+            background-color: #fff;
+            position: fixed;
+            border: 1px solid #9e9e9e;
+            left: 50%;
+            top: 50%;
+            margin-left: -300px;
+            margin-top: -200px;
+            //cursor: pointer;
+            font-size: 18px;
+            display: none;
+            box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+            z-index: 99;
+        }
+        #adoptQuizHeader {
+            width: 598px;
+            height: 48px;
+            line-height: 50px;
+            position: relative;
+            text-align: left;
+            padding-left: 15px;
+            /*background-color: red;*/
+        }
+        #adoptQuizContent {
+            width: 598px;
+            height: 210px;
+            line-height: 220px;
+            color: #37474f;
+            font-weight: bold;
+            /*background-color: green;*/
+        }
+        #adoptQuizAnswerChoice {
+            width: 598px;
+            height: 140px;
+            color: #37474f;
+        }
+        .adopt_answer_choice.MC li{
+            width: 297px;
+            height: 70px;
+            line-height: 70px;
+            position: relative;
+            list-style: none;
+            float: left;
+
+            border-left: 1px solid #9e9e9e;
+            border-right: 1px solid #9e9e9e;
+            border-top: 1px solid #9e9e9e;
+            /*background-color: #9933ff;*/
+        }
+        .adopt_answer_choice.OX li{
+            width: 297px;
+            height: 140px;
+            line-height: 140px;
+            position: relative;
+            list-style: none;
+            float: left;
+            font-size:30px;
+
+            border-left: 1px solid #9e9e9e;
+            border-right: 1px solid #9e9e9e;
+            border-top: 1px solid #9e9e9e;
+            /*background-color: #9933ff;*/
+        }
+        #cancelBtn {
+            position: absolute;
+            cursor:pointer;
+            right: 30px;
+            font-size: 25px;
+            top: 0;
+            /*background-color: #9933ff;*/
+        }
+        /*채택된 문제 끝*/
+
+        #adoptQuizDetailViewBG {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #424242;
+            opacity: .8;
+            display: none;
+            z-index: 2;
+        }
+        .paginate {
+            position: relative;
+            padding: 10px;
+            text-align: center;
+            line-height: 30px;
+            font-size: 18px;
+            font-weight: bold;
+            /*background-color: #f68500;*/
+        }
+        
+        .paginate>strong {
+            text-decoration: none;
+            background-color: #37474f;
+            color: #fff;
+            margin-left: 40px;
+            padding: 2px 10px;
+            border-radius: 50px;
+        }
+        .paginate>span>i {
+        	color: #bdbdbd;
+        	margin-left: 40px;
+            padding: 2px 10px;
+        }
+        .paginate>a {
+            text-decoration: none;
+            color: #37474f;
+            padding: 2px 10px;
+            margin-left: 40px;
+        }
+        .paginate>a:hover {
+        	color: #f68500;
+        }
+        #verifyPage {
+            bottom: -30px;
+        }
+        #adoptPage {
+            bottom: 60px;
+        }

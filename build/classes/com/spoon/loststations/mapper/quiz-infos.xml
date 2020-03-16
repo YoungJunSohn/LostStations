@@ -1,0 +1,312 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="quiz-infos">
+
+	<select id="selectQuizOne" parameterType="int" resultType="QuizInfo">
+		SELECT q.no, q.category, q.type, qe.content, q.cr_no crNo, u.nickname, u.profile_image profileImage
+		FROM quiz_infos q, quiz_exps qe, users u
+		WHERE q.no = qe.qi_no
+        AND qe.user_no = q.user_no
+		AND q.user_no = u.no
+		AND qe.type = 'Q'
+		AND q.no = #{no}
+	</select>
+
+	<select id="selectAdoptQuiz" resultType="QuizInfo">
+		SELECT no, category, type, content, crNo
+		FROM(SELECT q.no, q.category, q.type, content, cr_no crNo
+			FROM quiz_infos q, quiz_exps qe
+	        WHERE q.no = qe.qi_no
+	        AND qe.type = 'Q'
+			<!-- AND likes - dislikes > 14  -->
+			ORDER BY DBMS_RANDOM.RANDOM)
+		WHERE rownum = 1
+	</select>
+
+	<select id="selectAdopt6List" resultType="QuizInfo">
+		SELECT no, category, type, content, crNo
+		FROM(SELECT q.no, q.category, q.type, content, cr_no crNo
+			FROM quiz_infos q, quiz_exps qe
+	        WHERE q.no = qe.qi_no
+	        AND qe.type = 'Q'
+			<!-- AND likes - dislikes > 14  -->
+			ORDER BY DBMS_RANDOM.RANDOM)
+		WHERE rownum BETWEEN 1 AND 6
+	</select>
+	
+	<update id="updateViews" parameterType="int">
+		UPDATE quiz_infos 
+		SET views = views+1
+		WHERE no = #{no}
+	</update>
+	
+	<update id="updateLikes" parameterType="int">
+		UPDATE quiz_infos 
+		SET likes = (select count(*)
+					 from likes
+					 where content_no=#{contentNo} and content_type='Q' and type='L')
+		WHERE no = #{contentNo}
+	</update>
+	
+	<update id="updateDislikes" parameterType="int">
+		UPDATE quiz_infos 
+		SET dislikes = (select count(*)
+					 from likes
+					 where content_no=#{contentNo} and content_type='Q' and type='D')
+		WHERE no = #{contentNo}
+	</update>
+
+	<update id="updateQNo" parameterType="EMCont">
+		UPDATE quiz_infos
+		SET q_no = #{typeNo}
+		WHERE no = #{qiNo}
+	</update>
+	
+	<update id="updateENo" parameterType="EMCont">
+		UPDATE quiz_infos
+		SET e_no = #{typeNo}
+		WHERE no = #{qiNo}
+	</update>
+	
+	<update id="updateCrNo" parameterType="EMCont">
+		UPDATE quiz_infos
+		SET cr_no = #{typeNo}
+		WHERE no = #{qiNo}
+	</update>
+	
+	<update id="updateCateNo" parameterType="EMCont">
+		UPDATE quiz_infos
+		SET category = #{typeNo}
+		WHERE no = #{qiNo}
+	</update>
+
+	<select id="selectOne" resultType="QuizInfo" parameterType="int">
+		SELECT q.no, type, q.category, q.q_no, q.e_no, q.cr_no crNo, q.user_no userNo, q.likes, q.dislikes, q.views, u.nickname
+		FROM quiz_infos q, users u
+		WHERE q.no = #{no}
+		AND q.user_no = u.no
+	</select>
+
+	<select id="selectQuizByNo" parameterType="int" resultType="QuizInfo">
+		SELECT (SELECT qe.content  FROM quiz_infos qi, quiz_exps qe WHERE qi.q_no = qe.no AND qi.no = #{qiNo})  quizContent,
+				QI.NO no, QI.TYPE type, QI.CATEGORY category,qi.cr_no crNo ,CR.CH_NO chNo, QI.LIKES likes, QI.DISLIKES dislikes, qi.user_no userNo, QI.VIEWS views, QI.REGDATE regdate, U.NICKNAME nickname,u.profile_Image profileImage, QE.CONTENT expContent
+		FROM QUIZ_INFOS QI, QUIZ_EXPS QE, USERS U, CATEGORIES C , CORRECTS CR 
+		WHERE QI.NO=QE.QI_NO
+		AND QI.USER_NO=U.NO
+		AND QI.CATEGORY=C.NO
+		AND QI.NO = CR.QI_NO
+		AND QI.E_no = QE.no
+		AND QI.CR_NO = CR.NO
+		AND QI.NO = #{qiNo}
+	</select>
+
+	
+
+	<select id="selectUserAdoptInfo" parameterType="int" resultType="QuizData">
+		SELECT u.no userNo, NVL(adoptNum,0) adoptNum, NVL(adoptTotal,0) adoptTotal
+		FROM users u, (SELECT user_no, count(*) adoptNum
+					  FROM quiz_infos
+					  WHERE (likes-dislikes) > 14
+					  GROUP BY user_no) a, (SELECT user_no, count(*) adoptTotal
+											FROM quiz_infos
+											GROUP BY user_no) t
+		WHERE u.no = a.user_no(+)
+		AND u.no = t.user_no(+)
+		AND u.no = #{userNo}
+	</select>
+
+	<!-- QuizSelectOne -->
+	<select id="selectRandomOne" resultType="QuizInfo">
+		SELECT no, type, category, crNo , chNo, likes, dislikes, views, regdate,
+		nickname,profileImage, content
+		FROM (SELECT QI.NO, QI.TYPE type, QI.CATEGORY,qi.cr_no crNo ,CR.CH_NO chNo, QI.LIKES likes, QI.DISLIKES,
+		         QI.VIEWS, QI.REGDATE, U.NICKNAME NICKNAME,u.profile_Image profileImage, QE.CONTENT
+
+		FROM QUIZ_INFOS QI, QUIZ_EXPS QE, USERS U, CATEGORIES C , CORRECTS CR
+
+		WHERE QI.NO=QE.QI_NO
+		AND QI.USER_NO=U.NO
+		AND qi.q_no = qe.no
+		AND qi.cr_no = cr.no
+		AND QI.CATEGORY=C.NO
+		AND QI.NO = CR.QI_NO
+		AND QE.TYPE = 'Q'
+		order by DBMS_RANDOM.RANDOM)
+		WHERE rownum = 1
+
+	</select><!-- QuizSelectOne -->
+
+	<insert id="insert" parameterType="QuizInfo">
+		<selectKey resultType="int" order="BEFORE" keyProperty="no">
+			SELECT QUIZ_INFOS_SEQ.nextval
+			FROM dual
+		</selectKey>
+		INSERT INTO QUIZ_INFOS(no, type, category, user_no,likes, dislikes, views, regdate)
+		VALUES (#{no}, #{type}, #{category}, #{userNo}, 0, 0, 0, systimestamp)
+	</insert>
+	
+	<update id="update" parameterType="QuizInfo"> 
+		UPDATE QUIZ_INFOS 
+		SET Q_NO = #{qNo}, E_NO = #{eNo}, CR_NO = #{crNo} 
+		WHERE NO = #{no}
+	</update>
+		
+	<select id="selectQuizList" parameterType="pageVO" resultType="QuizInfo">
+		SELECT emCount, commentCount, no, type, category, userNo, nickname, profileImage, likes, dislikes, views, regdate, content 
+		FROM(SELECT emCount, commentCount, no, type, category, userNo, nickname, profileImage, likes, dislikes, views, regdate, content, rownum r
+			 FROM(SELECT NVL(em_cnt,0) emCount, NVL(c_cnt,0) commentCount, qi.no, qi.type, qi.category, qi.user_no userNo, u.nickname, u.profile_image profileImage, qi.likes, qi.dislikes, qi.views, qi.regdate, qe.content
+				  FROM quiz_infos qi, quiz_exps qe, users u,(SELECT qi_no, count(*) em_cnt 
+				  											 FROM ems 
+				  											 GROUP BY qi_no) ems,(SELECT qi_no,count(*) c_cnt 
+				  											 							   FROM comments 
+				  											 							   GROUP BY qi_no) comments 
+				  WHERE (likes - dislikes) BETWEEN -14 AND 14 
+				  AND qi.no = qe.qi_no 
+				  AND qi.q_no = qe.no
+				  AND qi.user_no = u.no 
+				  AND ems.qi_no(+) = qi.no 
+				  AND comments.qi_no(+) = qi.no 
+				  AND qe.type = 'Q'
+		<foreach separator="OR" close=")" open="AND (" item="category" collection="categories"> 
+			category = #{category} 
+		</foreach>
+		<foreach separator="OR" close=")" open="AND (" item="type" collection="types"> 
+		qi.type = #{type} 
+		</foreach>
+		<if test='searchContent != null and searchContent != ""'>
+			<choose>
+				<when test='searchType == "all"'> 
+					AND (content LIKE #{searchContent} OR nickname LIKE #{searchContent}) 
+				</when>
+				<when test='searchType == "content"'> 
+					AND content LIKE #{searchContent}
+				</when>
+				<when test='searchType == "writer"'> 
+					AND nickname LIKE #{searchContent}
+				</when>
+			</choose>
+		</if>
+		<choose>
+			<when test="sort == 1"> 
+				ORDER BY qi.no DESC 
+			</when>
+			<when test="sort == 2"> 
+				ORDER BY (likes - dislikes) DESC, qi.no DESC 
+			</when>
+			<when test="sort == 3"> 
+			ORDER BY (likes + dislikes) DESC, qi.no DESC 
+			</when>
+		</choose>
+		)) WHERE r BETWEEN #{start} AND #{end}
+	</select>
+	
+	<select id="selectQuizListTotal" parameterType="pageVO" resultType="int">
+		SELECT count(*) 
+		FROM quiz_infos qi, quiz_exps qe, users u 
+		WHERE (likes - dislikes) BETWEEN -14 AND 14 
+		AND qi.no = qe.qi_no 
+		AND qi.user_no = u.no 
+		AND qi.q_no = qe.no
+		AND qe.type = 'Q'
+		<foreach separator="OR" close=")" open="AND (" item="category" collection="categories"> 
+			category = #{category} 
+		</foreach>
+		<foreach separator="OR" close=")" open="AND (" item="type" collection="types"> 
+		qi.type = #{type} 
+		</foreach>
+		<if test='searchContent != null and searchContent != ""'>
+			<choose>
+				<when test='searchType == "all"'> 
+					AND (content LIKE #{searchContent} OR nickname LIKE #{searchContent})  
+				</when>
+				<when test='searchType == "content"'> 
+					AND content LIKE #{searchContent}
+				</when>
+				<when test='searchType == "writer"'> 
+					AND nickname LIKE #{searchContent}
+				</when>
+			</choose>
+		</if>
+		<choose>
+			<when test="sort == 1"> 
+				ORDER BY qi.no DESC 
+			</when>
+			<when test="sort == 2"> 
+				ORDER BY (likes - dislikes) DESC, qi.no DESC 
+			</when>
+			<when test="sort == 3"> 
+			ORDER BY (likes + dislikes) DESC, qi.no DESC 
+			</when>
+		</choose>
+	</select>
+	
+	<select id="selectVerifiQuizList" parameterType="pageVO" resultType="QuizInfo">
+		SELECT emCount, commentCount, no, type, category, userNo, likes, dislikes, views, regdate, content 
+		FROM(SELECT emCount, commentCount, no, type, category, userNo, likes, dislikes, views, regdate, content, rownum r
+			 FROM(SELECT NVL(em_cnt,0) emCount, NVL(c_cnt,0) commentCount, qi.no, qi.type, qi.category, qi.user_no userNo, qi.likes, qi.dislikes, qi.views, qi.regdate, qe.content
+				  FROM quiz_infos qi, quiz_exps qe,(SELECT qi_no, count(*) em_cnt 
+				  									FROM ems 
+				  									GROUP BY qi_no) ems,(SELECT qi_no,count(*) c_cnt 
+				  											 			 FROM comments 
+				  											 			 GROUP BY qi_no) comments 
+				  WHERE (likes - dislikes) BETWEEN -14 AND 14 
+				  AND qi.no = qe.qi_no 
+				  AND ems.qi_no(+) = qi.no 
+				  AND comments.qi_no(+) = qi.no 
+				  AND qe.type = 'Q'
+				  AND qi.user_no = #{userNo}
+		<choose>
+			<when test="sort == 1"> 
+				ORDER BY qi.no DESC 
+			</when>
+			<when test="sort == 2"> 
+				ORDER BY (likes - dislikes) DESC, qi.no DESC 
+			</when>
+			<when test="sort == 3"> 
+			ORDER BY (likes + dislikes) DESC, qi.no DESC 
+			</when>
+		</choose>
+		)) WHERE r BETWEEN #{start} AND #{end}
+	</select>
+	
+	<select id="selectVerifiQuizListTotal" parameterType="int" resultType="int">
+		SELECT count(*)
+		FROM quiz_infos qi, quiz_exps qe
+		WHERE (likes - dislikes) BETWEEN -14 AND 14 
+		AND qi.no = qe.qi_no 
+		AND qe.type = 'Q'
+		AND qi.user_no = #{userNo}
+	</select>
+	
+	<select id="selectUserAdoptQuizList" parameterType="pageVO" resultType="QuizInfo">
+		SELECT emCount, commentCount, no, type, category, userNo, likes, dislikes, views, regdate, content 
+		FROM(SELECT emCount, commentCount, no, type, category, userNo, likes, dislikes, views, regdate, content, rownum r
+			 FROM(SELECT NVL(em_cnt,0) emCount, NVL(c_cnt,0) commentCount, qi.no, qi.type, qi.category, qi.user_no userNo, qi.likes, qi.dislikes, qi.views, qi.regdate, qe.content
+				  FROM quiz_infos qi, quiz_exps qe,(SELECT qi_no, count(*) em_cnt 
+				  									FROM ems 
+				  									GROUP BY qi_no) ems,(SELECT qi_no,count(*) c_cnt 
+				  											 			 FROM comments 
+				  											 			 GROUP BY qi_no) comments 
+				  WHERE (likes - dislikes) > 14
+				  AND qi.no = qe.qi_no 
+				  AND ems.qi_no(+) = qi.no 
+				  AND qi.q_no = qe.no
+				  AND comments.qi_no(+) = qi.no 
+				  AND qe.type = 'Q'
+				  AND qi.user_no = #{userNo}
+		)) WHERE r BETWEEN #{start} AND #{end}
+	</select>
+	
+	<select id="selectUserAdoptQuizListTotal" parameterType="int" resultType="int">
+		SELECT count(*)
+		FROM quiz_infos qi, quiz_exps qe
+		WHERE (likes - dislikes) > 14
+		AND qi.no = qe.qi_no 
+		AND qi.q_no = qe.no
+		AND qe.type = 'Q'
+		AND qi.user_no = #{userNo}
+	</select>
+
+</mapper>

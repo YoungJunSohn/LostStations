@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:c="http://www.springframework.org/schema/c"
+	xmlns:jee="http://www.springframework.org/schema/jee"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-4.3.xsd">
+
+	<!-- Spring 자체 설정 -->
+	<!-- WAS가 설정 커넥션풀(DataSource) 을 jndi lookup -->
+
+	<jee:jndi-lookup id="dataSource"
+		jndi-name="java:comp/env/jdbc/oracle" />
+	<!-- jdbc/oracle 이거랑 context.xml의 name 을 봐야한다. -->
+
+
+	<!-- SqlsessionFactory 설정 -->
+	<bean id="sqlSessionFactory" p:dataSource-ref="dataSource"
+		p:configLocation="/WEB-INF/mybatis-config.xml"
+		class="org.mybatis.spring.SqlSessionFactoryBean" />
+
+	<!-- SqlsessionTemplate 설정(sqlsession) -->
+	<bean id="sqlSession" c:sqlSessionFactory-ref="sqlSessionFactory"
+		class="org.mybatis.spring.SqlSessionTemplate" />
+
+
+	<!-- DAO 설정 -->
+	<bean id="certsDAO"
+	p:session-ref="sqlSession"
+	class="com.spoon.loststations.dao.CertsDAOImpl"/>
+	
+	<bean id="choicesDAO"
+	p:session-ref="sqlSession"
+	class="com.spoon.loststations.dao.ChoicesDAOImpl"/>
+	<bean id="commentsDAO"
+	p:session-ref="sqlSession"
+	class="com.spoon.loststations.dao.CommentsDAOImpl"/>
+	
+	<bean id="correctsDAO"
+	p:session-ref="sqlSession"
+	class="com.spoon.loststations.dao.CorrectsDAOImpl"/>
+	
+	<bean id="EMContsDAO"
+	p:session-ref="sqlSession"
+	class="com.spoon.loststations.dao.EMContsDAOImpl"/>
+	
+	<bean id="EMsDAO"
+	p:session-ref="sqlSession"
+	class="com.spoon.loststations.dao.EMsDAOImpl"/>
+	
+	<bean id="gameResultsDAO"
+	p:session-ref="sqlSession"
+	class="com.spoon.loststations.dao.GameResultsDAOImpl"/>
+	
+	<bean id="gamesDAO"
+	p:session-ref="sqlSession"
+	class="com.spoon.loststations.dao.GamesDAOImpl"/>
+	
+	<bean id="gameUsersDAO"
+	p:session-ref="sqlSession"
+	class="com.spoon.loststations.dao.GameUsersDAOImpl"/>
+	
+	<bean id="likesDAO"
+	p:session-ref="sqlSession"
+	class="com.spoon.loststations.dao.LikesDAOImpl"/>
+	
+	<bean id="playLogsDAO"
+	p:session-ref="sqlSession"
+	class="com.spoon.loststations.dao.PlayLogsDAOImpl"/>
+	
+	<bean id="quizExpsDAO"
+	p:session-ref="sqlSession"
+	class="com.spoon.loststations.dao.QuizExpsDAOImpl"/>
+	
+	<bean id="quizInfosDAO"
+	p:session-ref="sqlSession"
+	class="com.spoon.loststations.dao.QuizInfosDAOImpl"/>
+	
+	<bean id="reportsDAO"
+	p:session-ref="sqlSession"
+	class="com.spoon.loststations.dao.ReportsDAOImpl"/>
+	
+	<bean id="usersDAO"
+	p:session-ref="sqlSession"
+	class="com.spoon.loststations.dao.UsersDAOImpl"/>
+
+	<bean id="inquiriesDAO"
+	p:session-ref="sqlSession"
+	class="com.spoon.loststations.dao.InquiriesDAOImpl"/>
+	<!-- 재현 -->
+	<bean
+		id="answersDAO"
+		p:session-ref="sqlSession"
+		class="com.spoon.loststations.dao.AnswersDAOImpl"/>
+	<!-- 재현 -->
+
+	<!-- Service 설정 -->
+	<bean id="gamesService"
+	p:gameUsersDAO-ref="gameUsersDAO"
+	p:gamesDAO-ref="gamesDAO"
+	p:quizInfosDAO-ref="quizInfosDAO"
+	p:choicesDAO-ref="choicesDAO"
+	class="com.spoon.loststations.service.GamesServiceImpl"/>
+	
+	<bean id="quizInfosService"
+	p:quizInfosDAO-ref="quizInfosDAO"
+	p:choicesDAO-ref="choicesDAO"
+	p:paginateUtil-ref="paginateUtil"
+	p:quizExpsDAO-ref="quizExpsDAO"
+	p:correctsDAO-ref="correctsDAO"
+	class="com.spoon.loststations.service.QuizInfosServiceImpl"/>
+	
+	
+	
+	<bean id="usersService"
+	p:paginateUtil-ref="paginateUtil"
+	p:usersDAO-ref="usersDAO"
+	p:imageUtil-ref="resizeImageUtil"
+	p:certsDAO-ref="certsDAO"
+	class="com.spoon.loststations.service.UsersServiceImpl"/>
+	
+	<bean id="inquiriesService"
+	p:inquiriesDAO-ref="inquiriesDAO" 
+	p:paginateUtil-ref="paginateUtil"
+	class="com.spoon.loststations.service.InquiriesServiceImpl"/>
+
+	<bean id="certsService" p:certdao-ref="certsDAO" class="com.spoon.loststations.service.CertsServiceImpl"/>
+
+	<!-- ㅎㅎㅎㅎㅎㅎㅎㅎㅎㅎㅎㅎ수정ㅎㅎㅎㅎㅎㅎㅎㅎㅎㅎㅎ -->
+
+	<bean id="likesServiceImpl"
+	p:likesDAO-ref="likesDAO"
+	p:quizInfosDAO-ref="quizInfosDAO"
+	p:commentsDAO-ref="commentsDAO"
+	p:emsDAO-ref="EMsDAO"
+	class="com.spoon.loststations.service.LikesServiceImpl"/>
+	
+	<bean id="reportsService"
+	p:reportsDAO-ref="reportsDAO" 
+	class="com.spoon.loststations.service.ReportsServiceImpl"></bean>
+	
+	<bean id="commentsService" 
+	p:commentsDAO-ref="commentsDAO"
+	p:paginateUtil-ref="paginateUtil"
+	p:likesDAO-ref="likesDAO"
+	class="com.spoon.loststations.service.CommentsServiceImpl"/>
+	
+	<bean id="EMsService"
+	p:emsDAO-ref="EMsDAO"
+	p:quizExpsDAO-ref="quizExpsDAO"
+	p:emContsDAO-ref="EMContsDAO"
+	p:usersDAO-ref="usersDAO"
+	p:paginateUtil-ref="paginateUtil"
+	p:correctsDAO-ref="correctsDAO"
+	p:choicesDAO-ref="choicesDAO"
+	p:quizInfosDAO-ref="quizInfosDAO"
+	p:likesDAO-ref="likesDAO"
+	class="com.spoon.loststations.service.EMsServiceImpl"/>
+	
+	<!-- ㅎㅎㅎㅎㅎㅎㅎㅎㅎㅎㅎㅎ수정ㅎㅎㅎㅎㅎㅎㅎㅎㅎㅎㅎ -->
+	
+	
+	<!-- 영준 start -->
+	<bean id="choicesService"
+	p:choicesDAO-ref="choicesDAO"
+	p:quizInfosDAO-ref="quizInfosDAO"
+	p:paginateUtil-ref="paginateUtil"
+	class="com.spoon.loststations.service.ChoicesServiceImpl"/>
+	<!-- 영준 end -->
+	<!-- 재현 -->
+	<bean
+		id="playLogsService"
+		p:playLogsDAO-ref="playLogsDAO"
+		p:paginateUtil-ref="paginateUtil"
+		p:usersDAO-ref="usersDAO"
+		p:gameUsersDAO-ref="gameUsersDAO"
+		p:quizInfosDAO-ref="quizInfosDAO"
+		p:emsDAO-ref="EMsDAO"
+		class="com.spoon.loststations.service.PlayLogsServiceImpl"/>
+	<bean
+		id="answersService"
+		p:answersDAO-ref="answersDAO"
+		class="com.spoon.loststations.service.AnswersServiceImpl"/>
+	<!-- 재현 -->
+	
+	<!-- Util 설정 -->
+	<bean id="paginateUtil"
+	class="com.spoon.loststations.util.PaginateUtil"/>	
+	<bean id="resizeImageUtil"
+		class="com.spoon.loststations.util.ResizeImageUtil"/>
+
+	<!-- websocket 설정 -->
+	<bean id="gameHandler"
+	p:gamesService-ref="gamesService"
+	p:playLogsService-ref="playLogsService"
+	p:games-ref="games"
+	p:mapper-ref="objectMapper"
+	class="com.spoon.loststations.handler.GameHandler"/>
+	
+	<bean id="games"
+	class="java.util.Vector"/>
+	
+	<bean id="objectMapper"
+	class="com.fasterxml.jackson.databind.ObjectMapper"/>
+
+</beans>

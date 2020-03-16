@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="choices">
+	
+	<!-- select4ChoiceList -->
+	<select id="select4ChoiceList" resultType="Choice" parameterType="int">
+		SELECT CH.NO no, CH.CR_NO crNo, CH.USER_NO userNo, CONTENT content, CH.REGDATE regdate
+		FROM CHOICES CH, CORRECTS CR
+		WHERE Cr.no=Ch.Cr_no
+		AND cr.user_no = ch.user_no
+		AND ch.cr_no = #{crNo}
+	</select><!-- selectChoiceList -->
+	
+	<select id="selectChoiceList" resultType="Choice" parameterType="int">
+		SELECT no, content
+		FROM choices
+		WHERE cr_no = #{crNo}
+	</select>
+	
+	<insert id="insert" parameterType="Choice">
+		<selectKey resultType="int" keyProperty="no" order="BEFORE">
+			SELECT choices_seq.nextval
+			FROM dual
+		</selectKey>
+		INSERT INTO choices(no, cr_no, user_no, content, regdate)
+		VALUES (#{no}, #{crNo}, #{userNo}, #{content}, systimestamp)
+	</insert>
+
+
+
+</mapper>

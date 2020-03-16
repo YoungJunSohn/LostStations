@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="comments">
+	<select id="selectList" resultType="Comment" parameterType="PageVO">
+		SELECT no,qiNo, content, userNo, likes, dislikes, regdate, nickname, profileImage
+		FROM(SELECT no,qiNo, content, userNo, likes, dislikes, regdate, nickname, profileImage, rownum r
+		FROM(SELECT c.no no, qi_no qiNo, content, c.user_no userNo, likes, dislikes, c.regdate regdate, u.nickname nickname, u.profile_image profileImage
+		FROM comments c, users u
+		WHERE c.user_no = u.no
+		AND qi_no = #{qiNo}
+		ORDER BY regdate))
+		WHERE r BETWEEN #{start} AND #{end}
+	</select>
+	
+	<select id="selectListTotal" resultType="int" parameterType="int">
+		SELECT count(*)
+		FROM comments c
+		WHERE c.qi_no = #{qiNo}
+	</select>
+	
+	<insert id="insert" parameterType="Comment">
+		INSERT INTO comments(no, qi_no, content, user_no, likes, dislikes, regdate)
+		VALUES (comments_seq.nextval, #{qiNo}, #{content}, #{userNo}, '0', '0', systimestamp)	
+	</insert>
+	<update id="update" parameterType="Comment">
+		UPDATE comments
+		SET likes = #{likes}, dislikes = #{dislikes}
+		WHERE no = #{no}
+	</update>
+
+	
+</mapper>

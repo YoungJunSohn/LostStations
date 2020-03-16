@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="em-conts">
+
+	<insert id="insert" parameterType="EMCont">
+		<selectKey order="BEFORE" keyProperty="no" resultType="int">
+			SELECT em_conts_seq.nextval
+			FROM dual
+		</selectKey>
+		INSERT INTO em_conts(no, em_no, type, type_no, regdate)
+		VALUES (#{no}, #{emNo}, #{type}, #{typeNo}, systimestamp)
+	</insert>
+	<select id="selectList" parameterType="int" resultType="EMCont">
+		SELECT no, em_no emNo, type, type_no typeNo, regdate
+		FROM em_conts
+		WHERE em_no = #{emNo}
+		ORDER BY type desc
+	</select>
+	
+</mapper>

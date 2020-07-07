@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="game-users">
+	
+	<select id="selectOne" parameterType="GameUser" resultType="GameUser">
+		SELECT no, game_no gameNo, user_no userNo, rank, survival_time survivalTime, regdate
+		FROM game_users
+		WHERE game_no = #{gameNo}
+		AND user_no = #{userNo}
+	</select>
+	
+	<insert id="insert" parameterType="GameUser">
+		<selectKey resultType="int" order="BEFORE" keyProperty="no">
+			SELECT GAME_USERS_SEQ.nextval
+			FROM dual
+		</selectKey>
+		INSERT INTO GAME_USERS(no, game_no, user_no, rank, survival_time, regdate)
+		VALUES (#{no},#{gameNo}, #{userNo}, #{rank}, #{survivalTime}, systimestamp)
+	</insert>
+	
+	<select id="selectUserNo" parameterType="int" resultType="PlayData">
+		SELECT u.no userNo, NVL(rankSum,0) rankSum, NVL(survivalTimeSum,0) survivalTimeSum, NVL(totalGame,0) totalGame, NVL(rank1Count,0) rank1Count
+			FROM users u, (SELECT user_no, SUM(rank) rankSum, SUM(survival_time) survivalTimeSum, count(*) totalGame
+							FROM game_users
+							GROUP BY user_no) g, (SELECT user_no, count(*) rank1Count
+												FROM game_users
+												WHERE rank = '1'
+												GROUP BY user_no) r
+		WHERE g.user_no = r.user_no(+)
+		AND u.no = g.user_no(+)
+		AND u.no = #{userNo}
+	</select>
+	
+</mapper>

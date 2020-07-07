@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="inquiries">
+	
+	<!--                     영준 start                          -->
+	<!-- insert -->
+	<insert id="insert" parameterType="Inquiry">
+		<selectKey order="BEFORE" keyProperty="no" resultType="int">
+			select INQUIRIES_SEQ.nextval
+			from dual
+		</selectKey>
+		INSERT INTO INQUIRIES(no, title, content, user_no, views,regdate)
+		VALUES (#{no}, #{title}, #{content}, #{userNo}, 0 , systimestamp)
+	</insert>
+	
+	<!-- inquiryModify -->
+	<update id="update" parameterType="Inquiry">
+		update inquiries
+		set title=#{title}, content=#{content}
+		where no = #{no} 
+	</update>
+	
+	<!-- inquiryModifyForm - 문의사항 하나 선택 -->
+	<select id="selectOne" resultType="Inquiry" parameterType="int">
+		select no, title, content, user_no userNo, views, regdate
+		from inquiries
+		where no=#{no}
+	</select>
+	<!--                                 영준 end                      -->
+	
+	
+	<!--  bc -->
+	
+	<!--  select List  inquiry list -->
+	<select id="selectList" resultType="Inquiry" parameterType="PageVo">
+
+	select no, profileImage, nickname, title, views, regdate, r,cnt
+	from(select no, profileImage, nickname, title, views, regdate, rowNum
+	as r ,cnt
+	from(SELECT i.no no, u.profile_image profileImage, u.nickname
+	nickname, i.title title, i.views views, i.regdate regdate,
+	NVL(c.cnt,0) cnt
+	from inquiries i,(select i.no no,count(*) cnt
+	from answers a, inquiries i
+	where a.i_no = i.no
+	GROUP BY i.no) c,users u
+	WHERE c.no(+) = i.no
+	AND i.user_no = u.no
+	order by no desc))
+	where r between #{start} and #{end}
+
+	</select>
+	
+	<!--  count select List -->
+	
+	<select id="selectTotal" resultType="int">
+	select count(*)
+	from inquiries
+	</select>
+	
+	<!-- 김재현 시작 -->
+	<select id="selectOneInquiryDetail" parameterType="int" resultType="Inquiry">
+		SELECT i.no, i.title, i.content, i.user_no userNo, i.views, i.regdate, u.nickname, u.profile_image profileImage
+		FROM inquiries i, users u
+		WHERE i.user_no = u.no
+		AND i.no = #{no}
+	</select>
+	
+	<delete id="inquiryDelete" parameterType="int">
+		DELETE
+		FROM inquiries
+		WHERE no = #{no}
+	</delete>
+	<!-- 김재현 끝 -->
+	
+	
+	
+	<!-- bcbcbcbcbcbcbc -->
+	<!--  search keyWord selectList -->
+	<select id="selectKeyword" parameterType="PageVo" resultType="Inquiry">
+	select no, profileImage, nickname, title, views, regdate, r,cnt
+	from(select no, profileImage, nickname, title, views, regdate, rowNum
+	as r ,cnt
+	from(SELECT i.no no, u.profile_image profileImage, u.nickname
+	nickname, i.title title, i.views views, i.regdate regdate,
+	NVL(c.cnt,0) cnt
+	from inquiries i,(select i.no no,count(*) cnt
+	from answers a, inquiries i
+	where a.i_no = i.no
+	GROUP BY i.no) c,users u
+	WHERE c.no(+) = i.no
+	AND i.user_no = u.no
+		
+		<if test='searchKeyWord!=null and searchKeyWord!=""'>
+	 <choose>
+		<when test='selectOption =="total"'>
+			AND (title LIKE #{searchKeyWord} OR nickname LIKE #{searchKeyWord})
+		</when>
+	
+		<when test='selectOption == "title"'>
+			AND title LIKE #{searchKeyWord} 
+		</when>
+	
+		<when test='selectOption == "nickname"'>
+			AND nickname LIKE #{searchKeyWord}
+		</when>
+	
+	</choose> 
+	</if>
+	
+	order by no desc))
+	where r between #{start} and #{end}
+	</select>
+	
+		
+	
+</mapper>

@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ems">
+
+	<!-- 0701 검증한 문제 수(수정 필요) -->
+	<select id="countQuizList" parameterType="int" resultType="int">
+		select count(e.no)
+		from ems e, quiz_infos qi
+		where e.user_no = #{userNo}
+		and e.qi_no = qi.no
+	</select>
+
+	<!-- 검증문제 채택 수(수정 필요) -->
+	<select id="countVerifiedQuiz" parameterType="int" resultType="int">
+		select count(likeNo)
+		from (select l.no likeNo, l.user_no userNo, likes,dislikes
+				from quiz_infos qi, likes l 
+				where l.user_no=qi.user_no
+				and l.user_no = #{userNo}
+				and likes > dislikes + 15)
+	</select>
+	<!-- 오류 채택수 -->
+	<select id="selectErrorCount" resultType="int" parameterType="int">
+		select count(qi_no)
+		from ems
+		where user_no=#{userNo} and adopt_check='T'
+	
+	</select>
+
+	<!-- 0624 검증 페이지 리스트 출력 -->
+	<select id="selectVerifyRankingList" resultType="User" parameterType="PageVO">
+		select no, rank , nickname, profileImage, playScore, registrationScore, verificationScore, regdate
+		from (select no,rownum rank , nickname, profileImage, playScore, registrationScore, verificationScore, regdate
+		from(select no, nickname, profile_image profileImage, play_score playScore, registration_score registrationScore, verification_score verificationScore, regdate
+	 		from users
+			order by 6 desc))
+		where rank between #{start} and #{end}
+	</select>
+
+	<select id="selectOne" resultType="EM" parameterType="int">
+		SELECT no, qi_no qiNo, user_no userNo, adopt_check adoptCheck, likes, dislikes, regdate
+		FROM ems
+		WHERE no = #{no}
+	</select>
+	
+	<update id="adoptUpdate" parameterType="int">
+		UPDATE ems
+		SET adopt_check = 'T'
+		WHERE no = #{no}
+	</update>
+	
+	<update id="likeUpdate" parameterType="EM">
+		UPDATE ems
+		SET likes = #{likes}, dislikes = #{dislikes}
+		WHERE no = #{no}
+	</update>
+	
+	<select id="selectList" resultType="EM" parameterType="pageVO">
+		SELECT no, qiNo,userNo, adoptCheck, likes, dislikes, regdate, nickname, profileImage
+		FROM(SELECT no, qiNo,userNo, adoptCheck, likes, dislikes, regdate, nickname, profileImage, rownum r
+		FROM(SELECT e.no no, qi_no qiNo, e.user_no userNo, adopt_check adoptCheck, likes, dislikes, e.regdate regdate, u.nickname nickname, u.profile_image profileImage
+		FROM ems e, users u
+		WHERE qi_no = #{qiNo}
+		AND u.no = e.user_no
+		AND adopt_check = 'F'
+		ORDER BY e.regdate))
+		WHERE r BETWEEN #{start} AND #{end}
+	</select>
+	
+	<select id="selectListTotal" resultType="int" parameterType="int">
+		SELECT count(*)
+		FROM ems e, users u
+		WHERE qi_no = #{qiNo}
+		AND u.no = e.user_no
+		AND adopt_check = 'F'
+	</select>
+	
+	<insert id="insert" parameterType="EM">
+		<selectKey order="BEFORE" keyProperty="no" resultType="int">
+			SELECT ems_seq.nextval
+			FROM dual
+		</selectKey>
+		INSERT INTO EMS(no, qi_no, user_no, adopt_check, likes, dislikes, regdate)
+		VALUES (#{no}, #{qiNo}, #{userNo}, 'F', '0', '0', systimestamp)
+	</insert>
+	
+	<select id="selectUserNo" resultType="CommentData" parameterType="int">
+		SELECT u.no userNo, NVL(commentAdoptNum,0) errorAdoptNum, NVL(totalComment,0) totalComment, NVL(AdoptNum,0) adoptNum
+		FROM users u, (SELECT u.no no, commentAdoptNum, totalComment 
+						FROM users u, (SELECT user_no, count(*) commentAdoptNum
+										FROM ems
+										WHERE adopt_check = 'T'
+										GROUP BY user_no) c, (SELECT user_no, count(*) totalComment
+																FROM ems
+																GROUP BY user_no) t
+						WHERE u.no = c.user_no(+)
+						AND u.no = t.user_no(+) ) cc, (SELECT count(*) AdoptNum
+														FROM ems e, quiz_infos q
+														WHERE e.qi_no = q.no
+														AND (q.likes - q.dislikes) > 14
+														AND e.user_no = #{userNo}) a
+		WHERE u.no = cc.no
+		AND u.no = #{userNo}
+	</select>
+
+</mapper>

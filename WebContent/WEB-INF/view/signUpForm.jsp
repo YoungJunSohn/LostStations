@@ -22,7 +22,7 @@
             display: inline-block;
         }
         #logo {
-            background-image: url(/img/logo_bluegray_2.jpg);
+            background-image: url(/img/logoMain2.png);
             background-position: 0 33px;
             background-size: 635px;
             background-repeat: no-repeat;
@@ -71,7 +71,7 @@
         .btn {
             cursor: pointer;
             border: transparent;
-            background-color: #37474f;
+            background-color: #00bc00;
             color: #fff;
             user-select: none;
             border: none;
@@ -126,7 +126,7 @@
         }
         a.popup {
             display: inline-block;
-            background-color: #37474f;
+            background-color: #00bc00;
             font-size: 14px;
             text-align: center;
             line-height: 40px;
@@ -653,7 +653,7 @@
                 <h3>이름</h3>
                 <input id="name" name="name" placeholder="한글 2~6자리">
                 <div class="name msg">한글 2~6자로 입력해 주세요.</div>
-                <a href="" id="cancelLink" class="signUp btn">취소</a>
+                <a href="/" id="cancelLink" class="signUp btn">취소</a>
                 <button id="submitBtn" class="signUp btn" type="submit">가입하기</button>
             </form><!--//signUpForm-->
         </div><!--//signUpBox-->

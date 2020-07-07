@@ -18,7 +18,7 @@ body {
 	margin: 0 0 60px 0;
 	text-align: center;
 	font-size: 40px;
-	color: #37474f;
+	color: #00bc00;
 }
 
 #loginForm a {
@@ -29,7 +29,7 @@ body {
 	text-align: center;
 	font-size: 12px;
 	text-decoration: none;
-	color: #37474f;
+	color: #00bc00;
 }
 
 #loginForm a:hover {
@@ -38,14 +38,14 @@ body {
 
 #logo {
 	width: 800px;
-	height: 266px;
-	/*background-color:lemonchiffon;*/
-	background-image: url("/img/logo_bluegray.jpg");
+	height: 193px;
+	/* background-color:lemonchiffon; */
+	background-image: url("/img/logoMain2.png");
 	background-repeat: no-repeat;
-	background-size: cover;
+	background-size: 100%;
 	position: absolute;
 	left: 50%;
-	top: 0;
+	margin-top: 80px;
 	margin-left: -400px;
 }
 
@@ -87,7 +87,9 @@ body {
 	margin: 20px auto 20px auto;
 	text-indent: 20px;
 	font-family: 'Nanum Gothic', sans-serif;
+	background-color:#efefef;
 	font-size: 15px;
+	border:none;
 }
 /*유효성 검사 글자*/
 .msg {
@@ -163,7 +165,7 @@ body #confirmPopup {
 .close_popup {
 	width: 50px;
 	height: 50px;
-	color: #37474f;
+	color: #00bc00;
 	font-size: 35px;
 	position: absolute;
 	top: 10px;
@@ -194,7 +196,7 @@ body #confirmPopup {
 	display: block;
 	width: 300px;
 	height: 40px;
-	background-color: #37474f;
+	background-color: #00bc00;
 	border-radius: 5px;
 	position: absolute;
 	bottom: 30px;

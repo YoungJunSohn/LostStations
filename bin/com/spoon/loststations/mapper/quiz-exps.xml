@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper 
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="quiz-exps">
+
+	<insert id="insert" parameterType="QuizExp">
+	
+		<selectKey order="BEFORE" keyProperty="no" resultType="int">
+			SELECT quiz_exps_seq.nextval
+			FROM dual
+		</selectKey>
+		INSERT INTO quiz_exps(no, qi_no, type, content, user_no, regdate)
+		VALUES (#{no}, #{qiNo}, #{type}, #{content}, #{userNo}, systimestamp)
+		
+	</insert>
+	<select id="selectOne" resultType="QuizExp" parameterType="int" >
+		SELECT no, qi_no qiNo, type, content, user_no userNo, regdate
+		FROM quiz_exps 
+		WHERE no = #{no}
+	</select>
+</mapper>

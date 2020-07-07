@@ -1,7 +1,7 @@
 h1 {
 	text-align: center;
 	height: 200px;
-	color: #37474f;
+	color: #00bc00;
 	position: relative;
 	line-height: 321px;
 	font-size: 35px;
@@ -32,7 +32,7 @@ h1 {
 #inquiryModifyForm .inquiries {
 	min-width: 150px;
 	height: 30px;
-	color: 37474f;
+	color: #00bc00;
 	font-size: 18px;
 	margin-left: 60px;
 	line-height: 30px;
@@ -80,7 +80,7 @@ body>.standalone_container {
 	height: 35px;
 	margin: 10px;
 	color: #fff;
-	background: #37474f;
+	background: #00bc00;
 	border-radius: 10px;
 	border: none;
 	float: left;
@@ -94,7 +94,7 @@ body>.standalone_container {
 	display: block;
 	text-align: center;
 	line-height: 36px;
-	background-color: #37474f;
+	background-color: #00bc00;
 	font-size: 15px;
 	font-weight: normal;
 	font-family: 'Noto Sans KR', sans-serif;

@@ -77,7 +77,7 @@
             </ul>
         </div><!--//topRankBox -->
         <div id="itemInfoBox">
-                <iframe width="390" height="200" src="https://www.youtube.com/embed/-Iy0xcJJw6I" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        	<iframe width="390" height="200" src="https://www.youtube.com/embed/NrR-iHyxJlE" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
         </div><!--//itemInfoBox -->
     </div><!--//section-->
 <c:import url="/WEB-INF/template/footer.jsp"/> 

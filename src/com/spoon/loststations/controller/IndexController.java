@@ -21,18 +21,19 @@ public class IndexController {
 	
 	@RequestMapping(value = { "/", "/index" }, method = RequestMethod.GET)
 	public String index(HttpSession session, User user) {
+		
 		session.getAttribute("cmd");
 
-		User loginUser =(User)session.getAttribute("loginUser");
+		User loginUser = (User)session.getAttribute("loginUser");
 		if (loginUser != null) {
 			
-			System.out.println("test");
+//			System.out.println("로그인 완료, 메인화면으로 이동합니다.");
 			return "main";
 
 		} 
 		
 		else {
-			System.out.println("test22");
+//			System.out.println("indexController : /.");
 			return "index";
 		}
 	}

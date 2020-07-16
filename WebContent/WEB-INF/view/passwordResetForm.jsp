@@ -22,7 +22,7 @@
             width: 900px;
             height: 110px;
             /*background-color: cornflowerblue;*/
-            background-image: url("/img/logo_bluegray.jpg");
+            background-image: url("/img/logoMain2.png");
             background-position: 130px;
             background-size: 70%;
             background-repeat: no-repeat;

@@ -44,27 +44,19 @@ public class LoginCheck implements HandlerInterceptor{
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
-		
 		/*
 		 * 여기에서 리턴이 true면 -> Controller로 이동
-		 * 
 		 * 여기에서 리턴이 false면 -> Controller로 가지 않음
 		 */
-		
-		
 		HttpSession session = request.getSession();
 		
 		Object loginUser = session.getAttribute(User.LOGIN_USER);
 		
 		if(loginUser==null) {
-			
 			response.sendRedirect("/index");
 			return false;
-			
 		}else {
-			//로그인 되었으니까 통과
 			return true;
-			
 		}//if~else end
 		
 	}//preHandle() end

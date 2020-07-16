@@ -17,25 +17,21 @@
 		view-controller설정 가능
 	 -->
 	 <!-- <mvc:view-controller path="/index.html"/> -->
-	 	 
+
 	 
 	 <!-- Interceptor 설정 -->
 	<mvc:interceptors>
 		<mvc:interceptor>
-		
-			<mvc:mapping path="/*"/>
+			<mvc:mapping path="/**"/>
 			<mvc:exclude-mapping path="/user"/>
 			<mvc:exclude-mapping path="/user/password/*"/>
 			<mvc:exclude-mapping path="/index"/>
 			<mvc:exclude-mapping path="/session"/>
 			<mvc:exclude-mapping path="/authentication"/>
 			<bean class="com.spoon.loststations.interceptor.LoginCheck"/>
-		
 		</mvc:interceptor>
 	</mvc:interceptors> 
-	
 
-	
 	<!-- REST경우 모든 요청을 
 		 DispatcherServlet에서 받기 때문에
 		 css,js,fonts등 폴더들에 접근시키는 설정이 필요함

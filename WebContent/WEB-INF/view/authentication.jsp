@@ -20,7 +20,7 @@
             user-select: none;
         }
         #logo {
-            background-image: url(/img/logo_bluegray_2.jpg);
+            background-image: url(/img/logoMain2.png);
             background-position: 0 33px;
             background-size: 635px;
             background-repeat: no-repeat;

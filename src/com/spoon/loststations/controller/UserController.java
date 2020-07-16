@@ -55,7 +55,8 @@ public class UserController {
 	}
 
 	@RequestMapping(value = "/user", method = RequestMethod.POST)
-	public String signUp(User user, Cert cert,HttpServletRequest req, RedirectAttributes ra) throws UnknownHostException {
+	public String signUp(User user, Cert cert,HttpServletRequest req, RedirectAttributes ra)
+			throws UnknownHostException {
 
 		
 		usersService.insertUser(user);
@@ -75,40 +76,56 @@ public class UserController {
 		
 		String ip = InetAddress.getLocalHost().getHostAddress();
 		
-		String host = "smtp.naver.com"; 
+		String host = "smtp.gmail.com"; 
 
-		final String username = "jbpspoon";
-		final String userpassword = "woalzlehd!";
+		//SMTP(Simple Mail Transfer Protocol 제작)
 		
+		//1. 메일 발신 정보 입력
+		final String username = "jbpspoon"; //발신자의 아이디
+		final String userpassword = "loststation!"; //발신자의 비밀번호
+		
+		//SMTP서버와 통신하는 포트(gmail : 465, naver : 587)
 		int port = 465;
-		String recipient = "max91128@naver.com"; //받는 사람의 메일주소
+		
+		//메일 정보 변수화
+		String recipient = "sohnyj37@gmail.com"; //받는 사람의 메일주소
 		
 		String subject = "LostStations"; //메일 제목
+		
 		String body = "<h2>LostStations 에 회원가입을 해주셔서 감사합니다.</h2>"
 				+ "<br/><h3> 아래의 링크를 클릭하여 계정을 활성화 해주세요.</h3>"
 				+"<br/><a href=\"http://"+ip+"/authentication/userNo/"+user.getNo()+"/code/"+code+"\">로그인 페이지로 가기</a>"; //메일 내용 입력해주세요. 
 		
-		Properties props = System.getProperties(); // 정보를 담기 위한 객체 생성 // SMTP 서버 정보 설정 
+		
+		//2. 정보를 담기 위한 객체 생성 // SMTP 서버 정보 설정
+		Properties props = System.getProperties();  
 		props.put("mail.smtp.host", host);
 		props.put("mail.smtp.port", port);
 		props.put("mail.smtp.auth", "true");
 		props.put("mail.smtp.ssl.enable", "true"); 
-		props.put("mail.smtp.ssl.trust", host); //Session 생성 
+		props.put("mail.smtp.ssl.trust", host);
+		
+		//3. Session 생성 
 		Session session = Session.getDefaultInstance(props, new javax.mail.Authenticator() {
 			String un=username; 
 			String pw=userpassword;
 			protected javax.mail.PasswordAuthentication getPasswordAuthentication() {
 				return new javax.mail.PasswordAuthentication(un, pw); 
 				}
-			}); 
+			});
+		
 		session.setDebug(true); //for debug 
-		Message mimeMessage = new MimeMessage(session); //MimeMessage 생성 
+		
+		//4. Message 클래스의 객체를 사용하여 수신자, 내용, 제목의 메시지를 작성
+		Message mimeMessage = new MimeMessage(session);  
 		try {
 			mimeMessage.setFrom(new InternetAddress("jbpspoon@naver.com"));
 			mimeMessage.setRecipient(Message.RecipientType.TO, new InternetAddress(recipient)); //수신자셋팅 //.TO 외에 .CC(참조) .BCC(숨은참조) 도 있음 
 			mimeMessage.setSubject(subject); //제목셋팅 
 			//mimeMessage.setText(body); //내용셋팅
 			mimeMessage.setContent(body,"text/html; charset=UTF-8"); //내용셋팅 (마크업을 사용하기위해 setText가 아니라 setContent사용) 
+			
+			//전송
 			Transport.send(mimeMessage); //javax.mail.Transport.send() 이용 
 			System.out.println("test");
 		} catch (MessagingException e) {
